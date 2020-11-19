@@ -85,6 +85,9 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 python3 generate_drive_token.py
 ```
 
+# Test
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Deploying on Heroku
 
 - Run the script to generate token file(token.pickle) for Google Drive:
