@@ -85,17 +85,14 @@ def bot_help(update, context):
 /{BotCommands.CancelAllCommand} <b>: Cancel all</b>
 /{BotCommands.StatusCommand} <b>: Shows a status of all the downloads</b>
 /{BotCommands.ListCommand} <b>[name]: Searches in the drive folder</b>
-/{BotCommands.deleteCommand} <b>[link]: Delete from drive[Only owner & sudo]</b>
+/{BotCommands.deleteCommand} <b>[link]: Delete from drive[Only owner]</b>
 /{BotCommands.StatsCommand} <b>: Show Stats of the machine</b>
 /{BotCommands.PingCommand} <b>: Check ping!</b>
-/{BotCommands.RestartCommand} <b>: Restart bot[Only owner & sudo]</b>
-/{BotCommands.AuthorizeCommand} <b>: Authorize[Only owner & sudo]</b>
-/{BotCommands.UnAuthorizeCommand} <b>: Unauthorize[Only owner & sudo]</b>
-/{BotCommands.AuthorizedUsersCommand} <b>: authorized users[Only owner & sudo]</b>
-/{BotCommands.AddSudoCommand} <b>: Add sudo user[Only owner]</b>
-/{BotCommands.RmSudoCommand} <b>: Remove sudo users[Only owner]</b>
-/{BotCommands.LogCommand} <b>: Get log file[Only owner & sudo]</b>
-
+/{BotCommands.RestartCommand} <b>: Restart bot[Only owner]</b>
+/{BotCommands.AuthorizeCommand} <b>: Authorize[Only owner]</b>
+/{BotCommands.UnAuthorizeCommand} <b>: Unauthorize[Only owner]</b>
+/{BotCommands.AuthorizedUsersCommand} <b>: authorized users[Only owner]</b>
+/{BotCommands.LogCommand} <b>: Get log file[Only owner]</b>
 '''
 
     help_string = f'''
@@ -112,13 +109,9 @@ def bot_help(update, context):
 /{BotCommands.ListCommand} <b>[name]: Searches in the drive folder</b>
 /{BotCommands.StatsCommand} <b>: Show Stats of the machine</b>
 /{BotCommands.PingCommand} <b>: Check ping!</b>
-
 '''
 
-    if CustomFilters.sudo_user(update) or CustomFilters.owner_filter(update):
-        sendMessage(help_string_adm, context.bot, update)
-    else:
-        sendMessage(help_string, context.bot, update)
+    sendMessage(help_string, context.bot, update)
 
 
 def main():
@@ -134,12 +127,12 @@ def main():
     ping_handler = CommandHandler(BotCommands.PingCommand, ping,
                                   filters=CustomFilters.authorized_chat | CustomFilters.authorized_user)
     restart_handler = CommandHandler(BotCommands.RestartCommand, restart,
-                                     filters=CustomFilters.owner_filter | CustomFilters.sudo_user)
+                                     filters=CustomFilters.owner_filter)
     help_handler = CommandHandler(BotCommands.HelpCommand,
                                   bot_help, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user)
     stats_handler = CommandHandler(BotCommands.StatsCommand,
                                    stats, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user)
-    log_handler = CommandHandler(BotCommands.LogCommand, log, filters=CustomFilters.owner_filter | CustomFilters.sudo_user)
+    log_handler = CommandHandler(BotCommands.LogCommand, log, filters=CustomFilters.owner_filter)
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(ping_handler)
     dispatcher.add_handler(restart_handler)
