@@ -36,17 +36,8 @@ Interval = []
 def getConfig(name: str):
     return os.environ[name]
 
-def mktable():
-    try:
-        conn = psycopg2.connect(DB_URI)
-        cur = conn.cursor()
-        sql = "CREATE TABLE users (uid bigint, sudo boolean DEFAULT FALSE);"
-        cur.execute(sql)
-        conn.commit()
-        LOGGER.info("Table Created!")
-    except Error as e:
-        LOGGER.error(e)
-        exit(1)
+
+LOGGER = logging.getLogger(__name__)
 
 try:
     if bool(getConfig('_____REMOVE_THIS_LINE_____')):
@@ -76,11 +67,15 @@ status_reply_dict = {}
 download_dict = {}
 # Stores list of users and chats the bot is authorized to use in
 AUTHORIZED_CHATS = set()
-SUDO_USERS = set()
+if os.path.exists('authorized_chats.txt'):
+    with open('authorized_chats.txt', 'r+') as f:
+        lines = f.readlines()
+        for line in lines:
+            #    LOGGER.info(line.split())
+            AUTHORIZED_CHATS.add(int(line.split()[0]))
 
 try:
     BOT_TOKEN = getConfig('BOT_TOKEN')
-    DB_URI = getConfig('DATABASE_URL')
     parent_id = getConfig('GDRIVE_FOLDER_ID')
     telegraph_token = getConfig('TELEGRAPH_TOKEN')
     DOWNLOAD_DIR = getConfig('DOWNLOAD_DIR')
@@ -95,26 +90,6 @@ try:
 except KeyError as e:
     LOGGER.error("One or more env variables missing! Exiting now")
     exit(1)
-
-try:
-    conn = psycopg2.connect(DB_URI)
-    cur = conn.cursor()
-    sql = "SELECT * from users;"
-    cur.execute(sql)
-    rows = cur.fetchall()  #returns a list ==> (uid, sudo)
-    for row in rows:
-        AUTHORIZED_CHATS.add(row[0])
-        if row[1]:
-            SUDO_USERS.add(row[0])
-except Error as e:
-    if 'relation "users" does not exist' in str(e):
-        mktable()
-    else:
-        LOGGER.error(e)
-        exit(1)
-finally:
-    cur.close()
-    conn.close()     
 
 try:
     MEGA_API_KEY = getConfig('MEGA_API_KEY')
