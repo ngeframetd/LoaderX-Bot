@@ -1,0 +1,18 @@
+{
+    "name": "LoaderX",
+    "description": "Telegram mirror bot with python",
+    "logo": "https://telegra.ph/file/e15e9ac9c5885b015e3ab.jpg",
+    "keywords": [
+      "telegram",
+      "bot",
+      "python"
+    ],
+    "repository": "https://github.com/ngeframetd/LoaderX-Bot.git",
+    "website": "https://github.com/ngeframetd/LoaderX-Bot/tree/master",
+    "success_url": "https://github.com/SVR666/LoaderX-Bot/blob/master/README.md",
+    "stack": "container",
+    "env": {
+      "ENV": {
+      "description": "Setting this to ANYTHING will enable webhooks when in env mode",
+      "value": "ANYTHING"
+    },
